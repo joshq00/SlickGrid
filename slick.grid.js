@@ -2643,6 +2643,13 @@ if (typeof Slick === "undefined") {
                     ,leftPx: rendered.leftPx
                     ,rightPx: rendered.rightPx
                 });
+            } else {
+                renderRows({
+                     top: 0
+                    ,bottom: actualFrozenRow - 1
+                    ,leftPx: rendered.leftPx
+                    ,rightPx: rendered.rightPx
+                });
             }
 
             postProcessFromRow = visible.top;
