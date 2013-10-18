@@ -2959,6 +2959,12 @@ if (typeof Slick === "undefined") {
                             return; // no editing mode to cancel, allow bubbling and default processing (exit without cancelling the event)
                         }
                         cancelEditAndSetFocus();
+                    } else if (e.which == 34) {
+                        scrollPageDown();
+                        handled = true;
+                    } else if (e.which == 33) {
+                        scrollPageUp();
+                        handled = true;
                     } else if (e.which == 37) {
                         handled = navigateLeft();
                     } else if (e.which == 39) {
@@ -3872,6 +3878,63 @@ if (typeof Slick === "undefined") {
                 setActiveCellInternal(getCellNode(activeRow, activeCell), (activeRow == getDataLength()) || options.autoEdit);
                 return false;
             }
+        }
+
+        function scrollPage(dir) {
+			var numFrozenRows = options.frozenRow > 0 ? options.frozenRow : 0,
+				numVisibleRows = Math.floor( viewportH / options.rowHeight ),
+				numVisibleUnfrozenRows = numVisibleRows - numFrozenRows,
+				deltaRows,
+				newFirstRow
+				;
+
+			if (activeRow != null) {
+				if (activeRow >= numFrozenRows) {
+					deltaRows = dir * numVisibleUnfrozenRows;
+				} else {
+					deltaRows = dir * ( numFrozenRows - activeRow );
+				}
+				newFirstRow = activeRow + deltaRows;
+			} else {
+				newFirstRow = getRowFromPosition( scrollTop ) + numVisibleRows;
+			}
+			scrollRowIntoView( newFirstRow );
+			render();
+
+
+			if (options.enableCellNavigation && activeRow != null) {
+				var row = activeRow + deltaRows;
+				if (row >= numberOfRows) {
+					row = numberOfRows - 1;
+				}
+				if (row < 0) {
+					row = 0;
+				}
+
+				var cell = 0, prevCell = null;
+				var prevActivePosX = activePosX;
+				while (cell <= activePosX) {
+					if (canCellBeActive(row, cell)) {
+						prevCell = cell;
+					}
+					cell += getColspan(row, cell);
+				}
+
+				if (prevCell !== null) {
+					setActiveCellInternal(getCellNode(row, prevCell));
+					activePosX = prevActivePosX;
+				} else {
+					resetActiveCell();
+				}
+			}
+		}
+
+        function scrollPageDown() {
+    		scrollPage(1);
+        }
+
+        function scrollPageUp() {
+		    scrollPage(-1);
         }
 
         function getCellNode(row, cell) {
