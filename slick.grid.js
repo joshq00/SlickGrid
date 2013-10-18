@@ -3249,13 +3249,13 @@ if (typeof Slick === "undefined") {
         }
 
         function scrollCellIntoView(row, cell, doPaging) {
+            if ( row >= actualFrozenRow ) {
+                scrollRowIntoView(row, doPaging);
+            }
+
             // Don't scroll to frozen cells
             if ( cell <= options.frozenColumn ) {
                 return;
-            }
-
-            if ( row < actualFrozenRow ) {
-                scrollRowIntoView(row, doPaging);
             }
 
             var colspan = getColspan(row, cell);
