@@ -3311,6 +3311,10 @@ if (typeof Slick === "undefined") {
                 activeCell = activePosX = activeCell = activePosX = getCellFromNode(activeCellNode[0]);
 
                 $activeCellNode.addClass("active");
+                if (rowsCache[activeRow]) {
+                    $(rowsCache[activeRow].rowNode).addClass('active');
+                }
+
 
                 if (options.editable && editMode && isCellPotentiallyEditable(activeRow, activeCell)) {
                     clearTimeout(h_editorLoader);
