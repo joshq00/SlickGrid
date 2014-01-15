@@ -366,10 +366,10 @@ if (typeof Slick === "undefined") {
     }
 
     function measureScrollbar() {
-      var $c = $("<div style='position:absolute; top:-10000px; left:-10000px; width:100px; height:100px; overflow:scroll;'></div>").appendTo("body");
+      var $c = $("<div style='position:absolute; top:-10000px; left:-10000px; overflow:scroll;'></div>").appendTo("body");
       var dim = {
-        width: $c.width() - $c[0].clientWidth,
-        height: $c.height() - $c[0].clientHeight
+        width: $c[0].offsetWidth + 1,
+        height: $c[0].offsetHeight + 1
       };
       $c.remove();
       return dim;
